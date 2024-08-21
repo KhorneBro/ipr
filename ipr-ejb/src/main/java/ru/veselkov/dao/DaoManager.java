@@ -8,29 +8,33 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceUnit;
-import jakarta.transaction.UserTransaction;
+import jakarta.transaction.*;
 import ru.veselkov.model.Customer;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import java.io.Serializable;
 
 @Stateless
-@TransactionManagement(TransactionManagementType.CONTAINER)
-//@TransactionManagement(TransactionManagementType.BEAN)
+//@TransactionManagement(TransactionManagementType.CONTAINER)
+@TransactionManagement(TransactionManagementType.BEAN)
 public class DaoManager implements Serializable {
 
-//    @PersistenceUnit
-//    private EntityManagerFactory entityManagerFactory;
+    @PersistenceUnit
+    private EntityManagerFactory entityManagerFactory;
 
-    @PersistenceContext(unitName = "iprPersistenceUnit")
+    //    @PersistenceContext(unitName = "iprPersistenceUnit")
     private EntityManager entityManager;
-//    private UserTransaction userTransaction;
+    private UserTransaction userTransaction;
 
-//    @Resource
-//    private SessionContext sessionContext;
+    @Resource
+    private SessionContext sessionContext;
 
-//    @PostConstruct
-//    private void init() {
-//        entityManager = entityManagerFactory.createEntityManager();
+    @PostConstruct
+    private void init() {
+        System.out.println("init");
+        entityManager = entityManagerFactory.createEntityManager();
 //        Context context = null;
 //        try {
 //            context = new InitialContext();
@@ -38,9 +42,8 @@ public class DaoManager implements Serializable {
 //        } catch (NamingException e) {
 //            throw new RuntimeException(e);
 //        }
-
-//        userTransaction = sessionContext.getUserTransaction();
-//    }
+        userTransaction = sessionContext.getUserTransaction();
+    }
 
     public Customer fundById(int id) {
         return entityManager.find(Customer.class, id);
@@ -58,21 +61,21 @@ public class DaoManager implements Serializable {
 
     @TransactionAttribute
     public <T> void persistT(T t) {
-//        try {
-//            userTransaction.begin();
-        entityManager.persist(t);
-//            userTransaction.commit();
-//        } catch (NotSupportedException | HeuristicRollbackException | SystemException | HeuristicMixedException |
-//                 RollbackException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            userTransaction.begin();
+            entityManager.persist(t);
+            userTransaction.commit();
+        } catch (NotSupportedException | HeuristicRollbackException | SystemException | HeuristicMixedException |
+                 RollbackException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-//    @PreDestroy
-//    private void destroy() {
-//
-//        if (entityManager.isOpen()) {
-//            entityManager.close();
-//        }
-//    }
+    @PreDestroy
+    private void destroy() {
+        System.out.println("destroy");
+        if (entityManager.isOpen()) {
+            entityManager.close();
+        }
+    }
 }

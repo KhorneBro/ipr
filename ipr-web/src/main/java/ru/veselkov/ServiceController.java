@@ -21,7 +21,6 @@ public class ServiceController {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public Response createCustomer(RegistrationUser registrationUser) {
-        System.out.println("here");
         service.createCustomer(registrationUser);
         return Response.ok().build();
     }

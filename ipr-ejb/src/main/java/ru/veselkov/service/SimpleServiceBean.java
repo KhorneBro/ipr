@@ -21,39 +21,11 @@ import java.util.List;
 @Dependent
 public class SimpleServiceBean implements SimpleService {
 
-    @EJB
+    @EJB(lookup = "java:app/ipr-ejb/DaoManager")
     private DaoManager daoManager;
 
-    @EJB
+    @EJB(lookup = "java:global/ipr/ipr-ejb/TimerService")
     private TimerService timerService;
-
-//    @Resource
-//    private UserTransaction transaction;
-
-//    @Override
-//    public CustomerDto findCustomerById(int id) {
-//        return map(dao.findCustomerById(id));
-//    }
-//
-//    @Override
-//    public ProductDto findProductById(int id) {
-//        return map(dao.findProductById(id));
-//    }
-//
-//    @Override
-//    public void saveProduct(ProductDto productDto) {
-//        dao.saveProduct(map(productDto));
-//    }
-//
-//    @Override
-//    public void updateProduct(ProductDto productDto) {
-//        dao.updateProduct(map(productDto));
-//    }
-//
-//    @Override
-//    public void deleteProduct(ProductDto productDto) {
-//        dao.deleteProduct(map(productDto));
-//    }
 
     @Override
     public void createCustomer(RegistrationUser registrationUser) {
@@ -79,7 +51,9 @@ public class SimpleServiceBean implements SimpleService {
 
         timerService.createTimer(10000L);
 
+        System.out.println("вызов перед persistT");
         daoManager.persistT(newCustomer);
+        System.out.println("вызов после persistT");
 
         System.out.println(newCustomer);
     }
