@@ -1,16 +1,25 @@
 package ru.veselkov.service;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import jakarta.annotation.Resource;
-import jakarta.ejb.SessionContext;
-import jakarta.ejb.Stateless;
-import jakarta.ejb.Timeout;
-import jakarta.ejb.Timer;
+import jakarta.ejb.*;
 
 @Stateless
 public class TimerService {
 
     @Resource
     private SessionContext sessionContext;
+
+    @PostConstruct
+    public void init() {
+        System.out.println("TimerService init");
+    }
+
+    @PreDestroy
+    public void destroy() {
+        System.out.println("TimerService destroy");
+    }
 
     @Timeout
     public void timeOut(Timer timer) {

@@ -29,9 +29,7 @@ public class SimpleServiceBean implements SimpleService {
 
     @Override
     public void createCustomer(RegistrationUser registrationUser) {
-
-//        Customer old = daoManager.findById(1);
-//        System.out.println(old);
+        System.out.println("createCustomer");
 
         Customer newCustomer = new Customer();
         newCustomer.setUsername(registrationUser.getUsername());

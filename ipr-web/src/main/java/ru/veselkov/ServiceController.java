@@ -37,7 +37,6 @@ public class ServiceController {
     @Path("/find/customer/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public Response createProduct(@PathParam("id") int id) {
         CustomerDto customerDto = service.findById(id);
         return Response.ok(customerDto).build();

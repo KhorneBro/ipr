@@ -16,10 +16,10 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.io.Serializable;
 
-@Stateless
+//@Stateless
 //@TransactionManagement(TransactionManagementType.CONTAINER)
-@TransactionManagement(TransactionManagementType.BEAN)
-public class DaoManager implements Serializable {
+//@TransactionManagement(TransactionManagementType.BEAN)
+public class DaoManager {
 
     @PersistenceUnit
     private EntityManagerFactory entityManagerFactory;
@@ -33,16 +33,16 @@ public class DaoManager implements Serializable {
 
     @PostConstruct
     private void init() {
-        System.out.println("init");
+        System.out.println("DaoManager init");
         entityManager = entityManagerFactory.createEntityManager();
-//        Context context = null;
-//        try {
-//            context = new InitialContext();
-//            userTransaction = (UserTransaction) context.lookup("java:comp/UserTransaction");
-//        } catch (NamingException e) {
-//            throw new RuntimeException(e);
-//        }
-        userTransaction = sessionContext.getUserTransaction();
+        Context context = null;
+        try {
+            context = new InitialContext();
+            userTransaction = (UserTransaction) context.lookup("java:comp/UserTransaction");
+        } catch (NamingException e) {
+            throw new RuntimeException(e);
+        }
+//        userTransaction = sessionContext.getUserTransaction();
     }
 
     public Customer fundById(int id) {
@@ -59,7 +59,7 @@ public class DaoManager implements Serializable {
         return entityManager.find(Customer.class, id);
     }
 
-    @TransactionAttribute
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public <T> void persistT(T t) {
         try {
             userTransaction.begin();
@@ -73,7 +73,7 @@ public class DaoManager implements Serializable {
 
     @PreDestroy
     private void destroy() {
-        System.out.println("destroy");
+        System.out.println("DaoManager destroy");
         if (entityManager.isOpen()) {
             entityManager.close();
         }

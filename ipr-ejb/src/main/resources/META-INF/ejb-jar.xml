@@ -3,5 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/ejb-jar_4_0.xsd"
          version="4.0">
+    <enterprise-beans>
+        <session>
+            <ejb-name>DaoManager</ejb-name>
+            <mapped-name>ejb/DaoManager</mapped-name>
+            <ejb-class>ru.veselkov.dao.DaoManager</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Bean</transaction-type>
+        </session>
+    </enterprise-beans>
 
 </ejb-jar>
