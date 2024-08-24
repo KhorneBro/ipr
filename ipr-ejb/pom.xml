@@ -96,6 +96,14 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.jboss/jboss-ejb-client -->
+        <dependency>
+            <groupId>org.jboss</groupId>
+            <artifactId>jboss-ejb-client</artifactId>
+            <version>4.0.38.Final</version>
+        </dependency>
+
+
 
     </dependencies>
 

@@ -21,7 +21,7 @@ public class SimpleServiceBean implements SimpleService {
 //    @EJB(name = "DaoManager")
     private DaoManager daoManager;
 
-//    @EJB(lookup = "java:global/ipr/ipr-ejb/TimerService")
+    @EJB(lookup = "java:global/ipr/ipr-ejb/TimerServiceBean")
     private TimerServiceBean timerService;
 
     @Override
