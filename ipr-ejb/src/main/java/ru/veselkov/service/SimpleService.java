@@ -7,7 +7,6 @@ import ru.veselkov.dto.RegistrationUser;
 
 import java.io.Serializable;
 
-@Remote
 public interface SimpleService extends Serializable {
 //    CustomerDto findCustomerById(int id);
 

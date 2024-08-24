@@ -11,6 +11,36 @@
             <session-type>Stateless</session-type>
             <transaction-type>Bean</transaction-type>
         </session>
+        <session>
+            <ejb-name>SimpleServiceBean</ejb-name>
+            <mapped-name>ejb/SimpleServiceBean</mapped-name>
+            <business-local>ru.veselkov.service.SimpleService</business-local>
+            <ejb-class>ru.veselkov.service.SimpleServiceBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <ejb-ref>
+                <ejb-ref-name>ejb/DaoManager</ejb-ref-name>
+                <ejb-ref-type>Session</ejb-ref-type>
+                <injection-target>
+                    <injection-target-class>ru.veselkov.service.SimpleServiceBean</injection-target-class>
+                    <injection-target-name>daoManager</injection-target-name>
+                </injection-target>
+            </ejb-ref>
+        </session>
+        <session>
+            <ejb-name>TimerServiceBean</ejb-name>
+            <mapped-name>ejb/TimerServiceBean</mapped-name>
+            <ejb-class>ru.veselkov.service.TimerServiceBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <resource-ref>
+                <res-ref-name>TimerService</res-ref-name>
+                <res-type>jakarta.ejb.TimerService</res-type>
+                <res-auth>Container</res-auth>
+                <injection-target>
+                    <injection-target-class>ru.veselkov.service.TimerServiceBean</injection-target-class>
+                    <injection-target-name>timerService</injection-target-name>
+                </injection-target>
+            </resource-ref>
+        </session>
     </enterprise-beans>
 
 </ejb-jar>

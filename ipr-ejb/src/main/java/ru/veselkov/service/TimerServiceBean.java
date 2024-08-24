@@ -5,11 +5,13 @@ import jakarta.annotation.PreDestroy;
 import jakarta.annotation.Resource;
 import jakarta.ejb.*;
 
-@Stateless
-public class TimerService {
+//@Stateless
+public class TimerServiceBean {
 
-    @Resource
-    private SessionContext sessionContext;
+//    @Resource
+//    private SessionContext sessionContext;
+
+    private TimerService timerService;
 
     @PostConstruct
     public void init() {
@@ -28,6 +30,6 @@ public class TimerService {
     }
 
     public void createTimer(long milisec) {
-        sessionContext.getTimerService().createTimer(milisec, "Timer created");
+        timerService.createTimer(milisec, "Timer created");
     }
 }

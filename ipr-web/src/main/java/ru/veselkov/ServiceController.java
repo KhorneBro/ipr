@@ -1,5 +1,6 @@
 package ru.veselkov;
 
+import jakarta.ejb.EJB;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -12,8 +13,7 @@ import ru.veselkov.service.SimpleService;
 @Path("/service")
 public class ServiceController {
 
-    //    @EJB(lookup = "java:global/ipr/ipr-ejb/SimpleServiceBean!ru.veselkov.service.SimpleService")
-    @Inject
+    @EJB(lookup = "java:global/ipr/ipr-ejb/SimpleServiceBean!ru.veselkov.service.SimpleService")
     SimpleService service;
 
     @Path("/create/customer")

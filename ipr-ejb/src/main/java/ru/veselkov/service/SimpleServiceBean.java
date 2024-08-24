@@ -1,9 +1,6 @@
 package ru.veselkov.service;
 
-import jakarta.annotation.Resource;
 import jakarta.ejb.EJB;
-import jakarta.ejb.SessionContext;
-import jakarta.enterprise.context.Dependent;
 import ru.veselkov.dao.DaoManager;
 import ru.veselkov.dto.CustomerDto;
 import ru.veselkov.dto.ProductDto;
@@ -18,14 +15,14 @@ import java.util.List;
 
 
 //@Stateless(name = "SimpleServiceBean")
-@Dependent
+//@Dependent
 public class SimpleServiceBean implements SimpleService {
 
-    @EJB(lookup = "java:app/ipr-ejb/DaoManager")
+//    @EJB(name = "DaoManager")
     private DaoManager daoManager;
 
-    @EJB(lookup = "java:global/ipr/ipr-ejb/TimerService")
-    private TimerService timerService;
+//    @EJB(lookup = "java:global/ipr/ipr-ejb/TimerService")
+    private TimerServiceBean timerService;
 
     @Override
     public void createCustomer(RegistrationUser registrationUser) {
