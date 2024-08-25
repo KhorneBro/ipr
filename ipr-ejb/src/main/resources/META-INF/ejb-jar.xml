@@ -9,7 +9,7 @@
             <mapped-name>ejb/DaoManager</mapped-name>
             <ejb-class>ru.veselkov.dao.DaoManager</ejb-class>
             <session-type>Stateless</session-type>
-            <transaction-type>Bean</transaction-type>
+            <transaction-type>Container</transaction-type>
         </session>
         <session>
             <ejb-name>SimpleServiceBean</ejb-name>

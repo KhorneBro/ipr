@@ -2,39 +2,32 @@ package ru.veselkov.dao;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
-import jakarta.annotation.Resource;
-import jakarta.ejb.*;
+import jakarta.ejb.TransactionAttribute;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceUnit;
 import jakarta.transaction.*;
 import ru.veselkov.model.Customer;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.io.Serializable;
 
 //@Stateless
 //@TransactionManagement(TransactionManagementType.CONTAINER)
 //@TransactionManagement(TransactionManagementType.BEAN)
 public class DaoManager {
 
-    @PersistenceUnit
-    private EntityManagerFactory entityManagerFactory;
-
-    //    @PersistenceContext(unitName = "iprPersistenceUnit")
+    @PersistenceContext
     private EntityManager entityManager;
     private UserTransaction userTransaction;
 
-    @Resource
-    private SessionContext sessionContext;
+//    @Resource
+//    private SessionContext sessionContext;
 
     @PostConstruct
     private void init() {
         System.out.println("DaoManager init");
-        entityManager = entityManagerFactory.createEntityManager();
+//        entityManager = entityManagerFactory.createEntityManager();
         Context context = null;
         try {
             context = new InitialContext();
@@ -59,7 +52,7 @@ public class DaoManager {
         return entityManager.find(Customer.class, id);
     }
 
-    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    @TransactionAttribute
     public <T> void persistT(T t) {
         try {
             userTransaction.begin();

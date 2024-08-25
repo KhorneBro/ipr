@@ -59,4 +59,16 @@ public class ServiceController {
         }
         return Response.ok().build();
     }
+
+    @Path("/remote/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Response remote(@PathParam("id") long id) {
+        try {
+            remoteCallService.call(id);
+        } catch (NamingException e) {
+            throw new RuntimeException(e);
+        }
+        return Response.ok().build();
+    }
 }
