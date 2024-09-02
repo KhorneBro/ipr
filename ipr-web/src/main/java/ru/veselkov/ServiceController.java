@@ -8,19 +8,31 @@ import jakarta.ws.rs.core.Response;
 import ru.veselkov.dto.CustomerDto;
 import ru.veselkov.dto.ProductDto;
 import ru.veselkov.dto.RegistrationUser;
-import ru.veselkov.service.RemoteCallService;
-import ru.veselkov.service.SimpleService;
+import ru.veselkov.service.cdi.CallCdiListInterfaceService;
+import ru.veselkov.service.cdi.CallCdiNamedBeanService;
+import ru.veselkov.service.cdi.CallCdiService;
+import ru.veselkov.service.remote.RemoteCallService;
+import ru.veselkov.service.ejb.SimpleService;
 
 import javax.naming.NamingException;
 
 @Path("/service")
 public class ServiceController {
 
-    @EJB(lookup = "java:global/ipr/ipr-ejb/SimpleServiceBean!ru.veselkov.service.SimpleService")
+    @EJB(lookup = "java:global/ipr/ipr-ejb/SimpleServiceBean!ru.veselkov.service.ejb.SimpleService")
     SimpleService service;
 
     @EJB
     private RemoteCallService remoteCallService;
+
+    @Inject
+    private CallCdiService callService;
+
+    @Inject
+    private CallCdiListInterfaceService callCdiInterfaceService;
+
+    @Inject
+    private CallCdiNamedBeanService callCdiNamedBeanService;
 
     @Path("/create/customer")
     @POST
@@ -69,6 +81,30 @@ public class ServiceController {
         } catch (NamingException e) {
             throw new RuntimeException(e);
         }
+        return Response.ok().build();
+    }
+
+    @Path("/cdi")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Response cdi() {
+        callService.call();
+        return Response.ok().build();
+    }
+
+    @Path("/cdi/list")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Response cdiList() {
+        callCdiInterfaceService.call();
+        return Response.ok().build();
+    }
+
+    @Path("/cdi/name")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Response cdiName() {
+        callCdiNamedBeanService.call();
         return Response.ok().build();
     }
 }

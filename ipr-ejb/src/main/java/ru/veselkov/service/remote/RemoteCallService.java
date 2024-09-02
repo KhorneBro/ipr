@@ -1,4 +1,4 @@
-package ru.veselkov.service;
+package ru.veselkov.service.remote;
 
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
@@ -23,6 +23,7 @@ public class RemoteCallService {
         final Context context = new InitialContext(jndiProperties);
         RemoteServiceIpr remoteServiceIpr = (RemoteServiceIpr) context.lookup("ejb:/target/ServiceBean!" + RemoteServiceIpr.class.getName());
         remoteServiceIpr.callRemote();
+        context.close();
         System.out.println("ipr call() end");
     }
 
@@ -33,6 +34,6 @@ public class RemoteCallService {
 
         final Context context = new InitialContext(jndiProperties);
         RemoteServiceIpr remoteServiceIpr = (RemoteServiceIpr) context.lookup("ejb:/target/ServiceBean!" + RemoteServiceIpr.class.getName());
-        remoteServiceIpr.callRemote(id);
+        remoteServiceIpr.callRemote(null);
     }
 }

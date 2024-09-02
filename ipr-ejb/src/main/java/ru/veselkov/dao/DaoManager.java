@@ -3,8 +3,11 @@ package ru.veselkov.dao;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceUnit;
 import jakarta.transaction.*;
 import ru.veselkov.model.Customer;
 
@@ -12,12 +15,12 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-//@Stateless
-//@TransactionManagement(TransactionManagementType.CONTAINER)
-//@TransactionManagement(TransactionManagementType.BEAN)
 public class DaoManager {
 
-    @PersistenceContext
+    @PersistenceUnit
+    private EntityManagerFactory entityManagerFactory;
+
+    //    @PersistenceContext
     private EntityManager entityManager;
     private UserTransaction userTransaction;
 
@@ -27,7 +30,7 @@ public class DaoManager {
     @PostConstruct
     private void init() {
         System.out.println("DaoManager init");
-//        entityManager = entityManagerFactory.createEntityManager();
+        entityManager = entityManagerFactory.createEntityManager();
         Context context = null;
         try {
             context = new InitialContext();
@@ -38,15 +41,14 @@ public class DaoManager {
 //        userTransaction = sessionContext.getUserTransaction();
     }
 
-    public Customer fundById(int id) {
-        return entityManager.find(Customer.class, id);
+    @PreDestroy
+    private void destroy() {
+        System.out.println("DaoManager destroy");
+        if (entityManager.isOpen()) {
+            entityManager.close();
+        }
     }
 
-    public <T> T updateT(T t) {
-        entityManager.joinTransaction();
-        entityManager.merge(t);
-        return t;
-    }
 
     public Customer findById(int id) {
         return entityManager.find(Customer.class, id);
@@ -64,11 +66,41 @@ public class DaoManager {
         }
     }
 
-    @PreDestroy
-    private void destroy() {
-        System.out.println("DaoManager destroy");
-        if (entityManager.isOpen()) {
-            entityManager.close();
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public <T> void persistTReqNew(T t) {
+        try {
+            userTransaction.begin();
+            entityManager.persist(t);
+            userTransaction.commit();
+        } catch (NotSupportedException | HeuristicRollbackException | SystemException | HeuristicMixedException |
+                 RollbackException e) {
+            throw new RuntimeException(e);
         }
     }
+
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public <T> void persistTMandatory(T t) {
+        try {
+            userTransaction.begin();
+            entityManager.persist(t);
+            userTransaction.commit();
+        } catch (NotSupportedException | HeuristicRollbackException | SystemException | HeuristicMixedException |
+                 RollbackException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public <T> void persistTSup(T t) {
+        try {
+            userTransaction.begin();
+            entityManager.persist(t);
+            userTransaction.commit();
+        } catch (NotSupportedException | HeuristicRollbackException | SystemException | HeuristicMixedException |
+                 RollbackException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }

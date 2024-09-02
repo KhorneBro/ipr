@@ -1,4 +1,4 @@
-package ru.veselkov.service;
+package ru.veselkov.service.ejb;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;

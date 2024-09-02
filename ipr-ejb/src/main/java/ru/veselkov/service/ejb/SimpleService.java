@@ -1,4 +1,4 @@
-package ru.veselkov.service;
+package ru.veselkov.service.ejb;
 
 import jakarta.ejb.Remote;
 import ru.veselkov.dto.CustomerDto;

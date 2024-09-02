@@ -1,4 +1,4 @@
-package ru.veselkov.service;
+package ru.veselkov.service.ejb;
 
 import jakarta.ejb.EJB;
 import ru.veselkov.dao.DaoManager;
