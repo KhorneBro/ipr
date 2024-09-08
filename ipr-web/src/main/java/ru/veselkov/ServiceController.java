@@ -107,4 +107,13 @@ public class ServiceController {
         callCdiNamedBeanService.call();
         return Response.ok().build();
     }
+
+    @Path("/create/customer/trans/{method}")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Response createCustomerTrans(@PathParam("method") String method, RegistrationUser registrationUser) {
+        service.createCustomerTrans(registrationUser, method);
+        return Response.ok().build();
+    }
 }

@@ -37,8 +37,11 @@ public class Customer implements Serializable {
     @Basic
     @Column(name = "is_delete")
     private boolean isDelete;
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<Product> productsByCustomerId;
+    @Basic
+    @Column(name = "transaction")
+    private String transaction;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Product> productsByCustomerId = new ArrayList<>();
 
     public int getCustomerId() {
         return customerId;
@@ -102,6 +105,14 @@ public class Customer implements Serializable {
 
     public void setDelete(boolean delete) {
         isDelete = delete;
+    }
+
+    public String getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(String transaction) {
+        this.transaction = transaction;
     }
 
     @Override

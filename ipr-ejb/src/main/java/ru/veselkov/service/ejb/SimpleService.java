@@ -1,6 +1,5 @@
 package ru.veselkov.service.ejb;
 
-import jakarta.ejb.Remote;
 import ru.veselkov.dto.CustomerDto;
 import ru.veselkov.dto.ProductDto;
 import ru.veselkov.dto.RegistrationUser;
@@ -19,6 +18,7 @@ public interface SimpleService extends Serializable {
 //    void deleteProduct(ProductDto model);
 
     void createCustomer(RegistrationUser registrationUser);
+    void createCustomerTrans(RegistrationUser registrationUser, String method);
 
     void createProduct(ProductDto productDto);
 

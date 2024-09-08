@@ -2,13 +2,21 @@ package ru.veselkov.service.cdi.impls;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import jakarta.ejb.EJB;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
+import ru.veselkov.dao.DaoManagerContainer;
+import ru.veselkov.model.Customer;
 import ru.veselkov.service.cdi.api.CommonCdiInterface;
 
 @RequestScoped
 @Named("req")
 public class RequestScopeCdiBean implements CommonCdiInterface {
+
+    @EJB
+    private DaoManagerContainer daoManagerContainer;
 
     private int i = 0;
 
@@ -33,5 +41,10 @@ public class RequestScopeCdiBean implements CommonCdiInterface {
     @PreDestroy
     private void destr() {
         System.out.println("RequestScopeCdiBean destroyed i = " + i);
+    }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void createTransactional(Customer newCustomer) {
+        daoManagerContainer.merge(newCustomer);
     }
 }

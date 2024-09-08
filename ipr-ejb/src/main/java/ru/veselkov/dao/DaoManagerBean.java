@@ -15,12 +15,11 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-public class DaoManager {
+public class DaoManagerBean {
 
     @PersistenceUnit
     private EntityManagerFactory entityManagerFactory;
 
-    //    @PersistenceContext
     private EntityManager entityManager;
     private UserTransaction userTransaction;
 
@@ -29,7 +28,7 @@ public class DaoManager {
 
     @PostConstruct
     private void init() {
-        System.out.println("DaoManager init");
+        System.out.println("DaoManagerBean init");
         entityManager = entityManagerFactory.createEntityManager();
         Context context = null;
         try {
@@ -43,7 +42,7 @@ public class DaoManager {
 
     @PreDestroy
     private void destroy() {
-        System.out.println("DaoManager destroy");
+        System.out.println("DaoManagerBean destroy");
         if (entityManager.isOpen()) {
             entityManager.close();
         }
@@ -54,44 +53,7 @@ public class DaoManager {
         return entityManager.find(Customer.class, id);
     }
 
-    @TransactionAttribute
     public <T> void persistT(T t) {
-        try {
-            userTransaction.begin();
-            entityManager.persist(t);
-            userTransaction.commit();
-        } catch (NotSupportedException | HeuristicRollbackException | SystemException | HeuristicMixedException |
-                 RollbackException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public <T> void persistTReqNew(T t) {
-        try {
-            userTransaction.begin();
-            entityManager.persist(t);
-            userTransaction.commit();
-        } catch (NotSupportedException | HeuristicRollbackException | SystemException | HeuristicMixedException |
-                 RollbackException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @TransactionAttribute(TransactionAttributeType.MANDATORY)
-    public <T> void persistTMandatory(T t) {
-        try {
-            userTransaction.begin();
-            entityManager.persist(t);
-            userTransaction.commit();
-        } catch (NotSupportedException | HeuristicRollbackException | SystemException | HeuristicMixedException |
-                 RollbackException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public <T> void persistTSup(T t) {
         try {
             userTransaction.begin();
             entityManager.persist(t);

@@ -7,7 +7,7 @@
         <session>
             <ejb-name>DaoManager</ejb-name>
             <mapped-name>ejb/DaoManager</mapped-name>
-            <ejb-class>ru.veselkov.dao.DaoManager</ejb-class>
+            <ejb-class>ru.veselkov.dao.DaoManagerBean</ejb-class>
             <session-type>Stateless</session-type>
             <transaction-type>Bean</transaction-type>
         </session>
