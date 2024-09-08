@@ -4,4 +4,6 @@ public interface CommonCdiInterface {
     int getI();
 
     String getName();
+
+    String say();
 }

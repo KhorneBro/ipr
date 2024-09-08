@@ -6,10 +6,12 @@ import jakarta.ejb.EJB;
 import jakarta.ejb.TransactionAttribute;
 import jakarta.ejb.TransactionAttributeType;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Named;
 import ru.veselkov.dao.DaoManagerContainer;
 import ru.veselkov.model.Customer;
 import ru.veselkov.service.cdi.api.CommonCdiInterface;
+import ru.veselkov.service.cdi.qualifiers.ReqQualifier;
 
 @RequestScoped
 @Named("req")
@@ -31,6 +33,13 @@ public class RequestScopeCdiBean implements CommonCdiInterface {
 
     public void setI(int i) {
         this.i = this.i + i;
+    }
+
+    @Override
+    @Produces
+    @ReqQualifier
+    public String say() {
+        return "RequestScopeCdiBean say";
     }
 
     @PostConstruct

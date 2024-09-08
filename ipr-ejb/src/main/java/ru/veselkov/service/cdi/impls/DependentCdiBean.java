@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Dependent
 @Named("dep")
-public class DependentCdiBean implements Serializable, CommonCdiInterface {
+public class DependentCdiBean implements CommonCdiInterface {
 
     private int i = 0;
 
@@ -29,8 +29,9 @@ public class DependentCdiBean implements Serializable, CommonCdiInterface {
     }
 
     @Produces
+    @Named("depSay")
     public String say() {
-        return "say hello DependentCdiBean";
+        return "DependentCdiBean say";
     }
 
     @PostConstruct

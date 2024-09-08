@@ -2,10 +2,12 @@ package ru.veselkov.service.cdi;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import ru.veselkov.service.cdi.impls.AppScopeCdiBean;
 import ru.veselkov.service.cdi.impls.DependentCdiBean;
 import ru.veselkov.service.cdi.impls.RequestScopeCdiBean;
 import ru.veselkov.service.cdi.impls.SessionScopeCdiBean;
+import ru.veselkov.service.cdi.qualifiers.ReqQualifier;
 
 import java.io.Serializable;
 
@@ -24,6 +26,10 @@ public class CallCdiService implements Serializable {
     @Inject
     private SessionScopeCdiBean sessionScopeCdiBean;
 
+    @Inject
+    @ReqQualifier
+    private String say;
+
 
     private int i = 1;
 
@@ -38,5 +44,10 @@ public class CallCdiService implements Serializable {
         System.out.println("dependentCdiBean.getI() = " + dependentCdiBean.getI());
         System.out.println("requestScopeCdiBean.getI() = " + requestScopeCdiBean.getI());
         System.out.println("sessionScopeCdiBean.getI() = " + sessionScopeCdiBean.getI());
+        System.out.println(say);
+    }
+
+    public void say() {
+
     }
 }

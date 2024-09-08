@@ -3,6 +3,7 @@ package ru.veselkov.service.cdi.impls;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Named;
 import ru.veselkov.service.cdi.api.CommonCdiInterface;
 
@@ -21,6 +22,13 @@ public class SessionScopeCdiBean implements Serializable, CommonCdiInterface {
     @Override
     public String getName() {
         return "SessionScopeCdiBean";
+    }
+
+    @Override
+    @Produces
+    @Named("SesSay")
+    public String say() {
+        return "SessionScopeCdiBean say";
     }
 
     public void setI(int i) {
