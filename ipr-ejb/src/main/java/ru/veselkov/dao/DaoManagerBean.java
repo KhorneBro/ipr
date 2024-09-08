@@ -64,5 +64,25 @@ public class DaoManagerBean {
         }
     }
 
+    public void changeCustomer(int id) throws SystemException {
+        try {
+            userTransaction.begin();
+            Customer customer = entityManager.find(Customer.class, id);
+            if (customer == null) {
+                userTransaction.rollback();
+                throw new IllegalArgumentException(" Customer is null ");
+            }
+
+            customer.setSurname("ChangedSurNameByBean");
+            userTransaction.commit();
+
+        } catch (NotSupportedException | SystemException | HeuristicRollbackException | HeuristicMixedException |
+                 RollbackException e) {
+            userTransaction.rollback();
+            throw new RuntimeException(e);
+        }
+
+
+    }
 
 }

@@ -5,6 +5,7 @@ import jakarta.annotation.PreDestroy;
 import jakarta.ejb.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import ru.veselkov.model.Customer;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
@@ -78,5 +79,16 @@ public class DaoManagerContainer {
     public <T> T merge(T t) {
         System.out.println("merge");
         return entityManager.merge(t);
+    }
+
+    @TransactionAttribute
+    public void changeCustomer(int id) {
+        Customer customer = entityManager.find(Customer.class, id);
+
+        if (customer == null) {
+            throw new IllegalArgumentException(" Customer is null ");
+        }
+
+        customer.setFirstname("ChangedNameByContainer");
     }
 }

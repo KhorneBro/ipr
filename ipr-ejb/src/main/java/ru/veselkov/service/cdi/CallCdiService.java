@@ -46,8 +46,4 @@ public class CallCdiService implements Serializable {
         System.out.println("sessionScopeCdiBean.getI() = " + sessionScopeCdiBean.getI());
         System.out.println(say);
     }
-
-    public void say() {
-
-    }
 }

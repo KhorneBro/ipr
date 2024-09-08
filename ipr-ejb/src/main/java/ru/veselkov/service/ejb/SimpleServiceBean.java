@@ -120,4 +120,13 @@ public class SimpleServiceBean implements SimpleService {
 
         System.out.println(newCustomer);
     }
+
+    @Override
+    public void changeCustomer(int id) {
+        try {
+            daoManagerContainer.changeCustomer(id);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Illegal Exception");
+        }
+    }
 }
