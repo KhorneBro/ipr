@@ -87,38 +87,30 @@ public class SimpleServiceBean implements SimpleService {
     @Override
     public CustomerDto findById(int id) {
         Customer customerFoundById = daoManager.findById(id);
-        System.out.println("customerFyndedById");
+        System.out.println("customerFoundById");
         System.out.println(customerFoundById);
         return Mapper.map(customerFoundById);
     }
 
     @Override
-    public void createCustomerTrans(RegistrationUser registrationUser, String method) {
+    public void createCustomerTrans(RegistrationUser registrationUser, String method1, String method2) {
         Customer newCustomer = new Customer();
         newCustomer.setUsername(registrationUser.getUsername());
         newCustomer.setFirstname(registrationUser.getFirstname());
         newCustomer.setSurname(registrationUser.getSurname());
         newCustomer.setPatronymic(registrationUser.getPatronymic());
         newCustomer.setUserRole(Role.valueOf(registrationUser.getUserRole()));
-        newCustomer.setTransaction(method);
+        newCustomer.setTransaction(method1);
 
-
-        if (method == null || method.length() < 1) {
-            return;
+        switch (method1) {
+            case "REQUIRED" -> daoManagerContainer.persistTReq(newCustomer, method2);
+            case "REQUIRES_NEW" -> daoManagerContainer.persistTReqNew(newCustomer, method2);
+            case "MANDATORY" -> daoManagerContainer.persistTMandatory(newCustomer, method2);
+            case "NOT_SUPPORTED" -> daoManagerContainer.persistTNotSup(newCustomer, method2);
+            case "SUPPORTS" -> daoManagerContainer.persistTSup(newCustomer, method2);
+            case "NEVER" -> daoManagerContainer.persistTNever(newCustomer, method2);
+            default -> System.out.println("Error");
         }
-
-        daoManagerContainer.persistTWithMethod(newCustomer, method);
-
-//        switch (method) {
-//            case "REQUIRED" -> daoManagerContainer.persistTReq(newCustomer);
-//            case "REQUIRES_NEW" -> daoManagerContainer.persistTReqNew(newCustomer);
-//            case "MANDATORY" -> daoManagerContainer.persistTMandatory(newCustomer);
-//            case "NOT_SUPPORTED" -> daoManagerContainer.persistTNotSup(newCustomer); //здесь ошибка
-//            case "SUPPORTS" -> daoManagerContainer.persistTSup(newCustomer);
-//            case "NEVER" -> daoManagerContainer.persistTNever(newCustomer); //здесь ошибка
-//            default -> System.out.println("Error");
-//        }
-
         System.out.println(newCustomer);
     }
 

@@ -52,7 +52,7 @@ public class RequestScopeCdiBean implements CommonCdiInterface {
         System.out.println("RequestScopeCdiBean destroyed i = " + i);
     }
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void createTransactional(Customer newCustomer) {
         daoManagerContainer.merge(newCustomer);
     }

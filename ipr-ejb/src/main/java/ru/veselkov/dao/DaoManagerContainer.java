@@ -23,12 +23,28 @@ public class DaoManagerContainer {
         System.out.println("DaoManagerContainer destroy");
     }
 
-    @TransactionAttribute(TransactionAttributeType.NEVER)
-    public <T> void persistTWithMethod(T t, String method) {
-        if (t == null || method == null || method.length() < 1) {
+    public <T> void persistTWithMethod(T t, String method1, String method2) {
+        if (t == null || method1 == null || method1.length() < 1
+                || method2 == null || method2.length() < 1) {
             return;
         }
-        switch (method) {
+        selectTransactionalType(t, method1, method2);
+    }
+
+    public <T> void selectTransactionalType(T t, String method1, String method2) {
+        switch (method1) {
+            case "REQUIRED" -> persistTReq(t, method2);
+            case "REQUIRES_NEW" -> persistTReqNew(t, method2);
+            case "MANDATORY" -> persistTMandatory(t, method2);
+            case "NOT_SUPPORTED" -> persistTNotSup(t, method2);
+            case "SUPPORTS" -> persistTSup(t, method2);
+            case "NEVER" -> persistTNever(t, method2);
+            default -> System.out.println("Error");
+        }
+    }
+
+    private <T> void selectTransactionalType(T t, String method1) {
+        switch (method1) {
             case "REQUIRED" -> persistTReq(t);
             case "REQUIRES_NEW" -> persistTReqNew(t);
             case "MANDATORY" -> persistTMandatory(t);
@@ -39,16 +55,63 @@ public class DaoManagerContainer {
         }
     }
 
+    /**
+     * Если клиент работает в транзакции и вызывает метод Enterprise-бина, метод выполняется в транзакции клиента.
+     * Если клиент не связан с транзакцией, контейнер запускает новую транзакцию перед запуском метода.
+     *
+     * @param t
+     * @param <T>
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public <T> void persistTReq(T t, String method2) {
+        System.out.println("REQUIRED");
+        selectTransactionalType(t, method2);
+        entityManager.persist(t);
+    }
+
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public <T> void persistTReq(T t) {
         System.out.println("REQUIRED");
         entityManager.persist(t);
     }
 
+    /**
+     * Если клиент работает в транзакции и вызывает метод Enterprise-бина, контейнер выполняет следующие шаги:
+     * Приостанавливает транзакцию клиента
+     * Запускает новую транзакцию
+     * Делегирует вызов метода
+     * Возобновляет транзакцию клиента после завершения метода
+     * Если клиент не связан с транзакцией, контейнер запускает новую транзакцию перед запуском метода.
+     *
+     * @param t
+     * @param method2
+     * @param <T>
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public <T> void persistTReqNew(T t, String method2) {
+        System.out.println("REQUIRES_NEW");
+        selectTransactionalType(t, method2);
+        entityManager.persist(t);
+    }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public <T> void persistTReqNew(T t) {
         System.out.println("REQUIRES_NEW");
+        entityManager.persist(t);
+    }
+
+    /**
+     * Если клиент работает в транзакции и вызывает метод Enterprise-бина, метод выполняется в транзакции клиента.
+     * Если клиент не связан с транзакцией, контейнер выбрасывает исключение TransactionRequiredException.
+     *
+     * @param t
+     * @param method2
+     * @param <T>
+     */
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public <T> void persistTMandatory(T t, String method2) {
+        System.out.println("MANDATORY");
+        selectTransactionalType(t, method2);
         entityManager.persist(t);
     }
 
@@ -58,9 +121,40 @@ public class DaoManagerContainer {
         entityManager.persist(t);
     }
 
+    /**
+     * Если клиент работает в транзакции и вызывает метод Enterprise-бина, контейнер приостанавливает транзакцию клиента перед вызовом метода.
+     * После завершения метода контейнер возобновляет транзакцию клиента.
+     * Если клиент не связан с транзакцией, контейнер не запускает новую транзакцию перед запуском метода.
+     *
+     * @param t
+     * @param method2
+     * @param <T>
+     */
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public <T> void persistTNotSup(T t, String method2) {
+        System.out.println("NOT_SUPPORTED");
+        selectTransactionalType(t, method2);
+        entityManager.persist(t);
+    }
+
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public <T> void persistTNotSup(T t) {
         System.out.println("NOT_SUPPORTED");
+        entityManager.persist(t);
+    }
+
+    /**
+     * Если клиент работает в транзакции и вызывает метод Enterprise-бина, метод выполняется в транзакции клиента.
+     * Если клиент не связан с транзакцией, контейнер не запускает новую транзакцию перед запуском метода.
+     *
+     * @param t
+     * @param method2
+     * @param <T>
+     */
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public <T> void persistTSup(T t, String method2) {
+        System.out.println("SUPPORTS");
+        selectTransactionalType(t, method2);
         entityManager.persist(t);
     }
 
@@ -70,9 +164,24 @@ public class DaoManagerContainer {
         entityManager.persist(t);
     }
 
+    /**
+     * Если клиент работает в транзакции и вызывает метод Enterprise-бина, контейнер генерирует RemoteException.
+     * Если клиент не связан с транзакцией, контейнер не запускает новую транзакцию перед запуском метода.
+     *
+     * @param t
+     * @param method2
+     * @param <T>
+     */
+    @TransactionAttribute(TransactionAttributeType.NEVER)
+    public <T> void persistTNever(T t, String method2) {
+        System.out.println("NEVER");
+        entityManager.persist(t);
+        selectTransactionalType(t, method2);
+    }
+
     @TransactionAttribute(TransactionAttributeType.NEVER)
     public <T> void persistTNever(T t) {
-        System.out.println("SUPPORTS");
+        System.out.println("NEVER");
         entityManager.persist(t);
     }
 

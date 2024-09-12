@@ -10,7 +10,7 @@ public interface SimpleService extends Serializable {
 
     void createCustomer(RegistrationUser registrationUser);
 
-    void createCustomerTrans(RegistrationUser registrationUser, String method);
+    void createCustomerTrans(RegistrationUser registrationUser, String method, String method2);
 
     void createProduct(ProductDto productDto);
 

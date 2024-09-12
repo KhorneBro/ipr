@@ -20,7 +20,7 @@ import javax.naming.NamingException;
 public class ServiceController {
 
     @EJB(lookup = "java:global/ipr/ipr-ejb/SimpleServiceBean!ru.veselkov.service.ejb.SimpleService")
-    SimpleService service;
+    private SimpleService service;
 
     @EJB
     private RemoteCallService remoteCallService;
@@ -75,7 +75,7 @@ public class ServiceController {
     @Path("/remote/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public Response remote(@PathParam("id") long id) {
+    public Response remote(@PathParam("id") int id) {
         try {
             remoteCallService.call(id);
         } catch (NamingException e) {
@@ -108,12 +108,14 @@ public class ServiceController {
         return Response.ok().build();
     }
 
-    @Path("/create/customer/trans/{method}")
+    @Path("/create/customer/trans/{method1}/{method2}")
     @POST
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public Response createCustomerTrans(@PathParam("method") String method, RegistrationUser registrationUser) {
-        service.createCustomerTrans(registrationUser, method);
+    public Response createCustomerTrans(@PathParam("method1") String method1,
+                                        @PathParam("method2") String method2,
+                                        RegistrationUser registrationUser) {
+        service.createCustomerTrans(registrationUser, method1, method2);
         return Response.ok().build();
     }
 }

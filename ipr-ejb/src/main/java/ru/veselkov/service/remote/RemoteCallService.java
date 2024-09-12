@@ -20,7 +20,7 @@ public class RemoteCallService {
         System.out.println("ipr call() end");
     }
 
-    public void call(long id) throws NamingException {
-       remoteServiceIpr.callRemote(null);
+    public void call(int id) throws NamingException {
+       remoteServiceIpr.callRemote(id);
     }
 }
