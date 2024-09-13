@@ -22,7 +22,6 @@ import java.util.List;
 //@Dependent
 public class SimpleServiceBean implements SimpleService {
 
-    //    @EJB(name = "DaoManager")
     private DaoManagerBean daoManager;
 
     @EJB
@@ -31,7 +30,7 @@ public class SimpleServiceBean implements SimpleService {
     @Inject
     private RequestScopeCdiBean requestScopeCdiBean;
 
-    @EJB(lookup = "java:global/ipr/ipr-ejb/TimerServiceBean")
+    @EJB(lookup = "java:module/TimerServiceBean")
     private TimerServiceBean timerService;
 
     @Override
